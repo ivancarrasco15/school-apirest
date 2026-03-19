@@ -28,4 +28,10 @@ final class DoctrineBookRepository implements IBookRepository{
         return $data;
     } 
 
+    public function delete(Book $book): void
+    {
+        $this->em->remove($book);
+        $this->em->flush();
+    }
+
 } 

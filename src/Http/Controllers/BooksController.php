@@ -26,33 +26,58 @@ class BooksController {
         //genero respuesta 200 ok + libros JSON
     }
 
-    public function show($id)
+    public function show(string $id): void
     {
-        $bookRepo = $this->br;
-        $bookId = new BookId($id);
+        $book = $this->br->find(new BookId($id));
 
-        $book=$bookRepo->find($bookId, $bookRepo);
+        if ($book === null) {
+            (new ResponseJson(404, ['msg' => 'Book not found']))->send();
+            return;
+        }
 
-        $response = new ResponseJson(200, $book->toArray());
-        $response->send();
+        (new ResponseJson(200, $book->toArray()))->send();
     }
 
     public function create()
     {
         $data = $this->request->getBody();
-        $book = Book::fromArray($data);
+        $book = new Book(new BookId($data['id']), $data['title'], $data['author'], $data['available']);
         $this->br->save($book);
-
-        $response = new ResponseJson(201, $book->toArray());
-        $response->send();
     }
 
     public function update(string $id)
     {
+            $book = $this->br->find(new BookId($id));
+    
+            if ($book === null) {
+                (new ResponseJson(404, ['msg' => 'Book not found']))->send();
+                return;
+            }
+    
+            $data = $this->request->getBody();
+            if (isset($data['title'])) {
+                $book->setTitle($data['title']);
+            }
+            if (isset($data['author'])) {
+                $book->setAuthor($data['author']);
+            }
+            if (isset($data['available'])) {
+                $book->setAvailable($data['available']);
+            }
+    
+            $this->br->save($book);
     }
 
     public function delete(string $id)
     {
+        $book = $this->br->find(new BookId($id));
+
+        if ($book === null) {
+            (new ResponseJson(404, ['msg' => 'Book not found']))->send();
+            return;
+        }
+
+        $this->br->delete($book);
     }
     
 }

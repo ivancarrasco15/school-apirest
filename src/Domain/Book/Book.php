@@ -23,10 +23,12 @@ use Doctrine\ORM\Mapping\Entity;
         #[Column(type:'boolean')]
         private bool $available=true;
 
-        function __construct(BookId $id, string $title)
+        function __construct(BookId $id, string $title, string $author, bool $available=true)
         {
             $this->id=(string)$id;
             $this->title=$title;
+            $this->author=$author;
+            $this->available=$available;
         }
         
         public function setTitle(string $title):void
@@ -36,6 +38,19 @@ use Doctrine\ORM\Mapping\Entity;
             }
             $this->title = $title;
 
+        }
+        public function setAuthor(string $author):void
+        {
+            if(empty(trim($author))){
+                throw new \InvalidArgumentException("Author cannot be empty");
+            }
+            $this->author = $author;
+
+        }
+
+        public function setAvailable(bool $available):void
+        {
+            $this->available = $available;
         }
 
         public function id():BookId{
@@ -55,20 +70,5 @@ use Doctrine\ORM\Mapping\Entity;
                 'author'=>$this->author,
                 'available'=>$this->available
             ];
-        }
-
-        public static function fromArray(array $data): self{
-            if(!isset($data['id']) || !isset($data['title'])){
-                throw new \InvalidArgumentException("Missing required fields: id and title");
-            }
-            $book = new self(new BookId($data['id']), $data['title']);
-            if(isset($data['author'])){
-                $book->author = $data['author'];
-            }
-            if(isset($data['available'])){
-                $book->available = (bool)$data['available'];
-            }
-            return $book;
-        }      
-        
+        }     
     }
