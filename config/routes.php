@@ -5,6 +5,7 @@ namespace App\Config;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\TeachersController;
 use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\SubjectsController;
 
 return [
     [
@@ -83,5 +84,31 @@ return [
         'method' => 'DELETE',
         'path' => '/api/students/{id}',
         'handler' => [StudentsController::class, 'delete']
+    ]
+    ,
+    [
+        'method' => 'GET',
+        'path' => '/api/subjects',
+        'handler' => [SubjectsController::class, 'index']
+    ],
+    [
+        'method' => 'GET',
+        'path' => '/api/subjects/{id}',
+        'handler' => [SubjectsController::class, 'show']
+    ],
+    [
+        'method' => 'POST',
+        'path' => '/api/subjects',
+        'handler' => [SubjectsController::class, 'create']
+    ],
+    [
+        'method' => 'PUT',
+        'path' => '/api/subjects/{id}',
+        'handler' => [SubjectsController::class, 'update']
+    ],
+    [
+        'method' => 'DELETE',
+        'path' => '/api/subjects/{id}',
+        'handler' => [SubjectsController::class, 'delete']
     ]
 ];
