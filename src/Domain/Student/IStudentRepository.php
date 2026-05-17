@@ -2,8 +2,7 @@
 
 namespace App\Domain\Student;
 
-interface IStudentRepository
-{
+interface IStudentRepository {
     public function save(Student $student): void;
     public function find(StudentId $id): ?Student;
     public function findAll(): array;
